@@ -18,8 +18,99 @@
             color: white;
             min-height: 100vh;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
         }
 
+        /* Звёздное небо */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        .star.small { width: 1px; height: 1px; }
+        .star.medium { width: 2px; height: 2px; }
+        .star.large { width: 3px; height: 3px; }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Анимированные планеты */
+        .planets {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            animation: orbit 20s linear infinite;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .planet.mercury {
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #ffc649, #ff8c00);
+            top: 20%;
+            left: 80%;
+            animation-duration: 8s;
+        }
+
+        .planet.venus {
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle, #ffa500, #ff6b35);
+            top: 60%;
+            left: 10%;
+            animation-duration: 12s;
+        }
+
+        .planet.mars {
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, #ff4444, #cc1100);
+            top: 30%;
+            left: 15%;
+            animation-duration: 16s;
+        }
+
+        .planet.jupiter {
+            width: 18px;
+            height: 18px;
+            background: radial-gradient(circle, #d2691e, #a0522d);
+            top: 70%;
+            left: 85%;
+            animation-duration: 24s;
+        }
+
+        @keyframes orbit {
+            0% { transform: translateY(0px) rotate(0deg) scale(1); opacity: 0.7; }
+            25% { transform: translateY(-30px) rotate(90deg) scale(1.1); opacity: 1; }
+            50% { transform: translateY(-15px) rotate(180deg) scale(1); opacity: 0.8; }
+            75% { transform: translateY(-40px) rotate(270deg) scale(1.1); opacity: 1; }
+            100% { transform: translateY(0px) rotate(360deg) scale(1); opacity: 0.7; }
+        }
+
+        /* Анимированный header */
         .header {
             text-align: center;
             margin-bottom: 30px;
@@ -27,14 +118,45 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             backdrop-filter: blur(10px);
+            animation: slideInUp 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            animation: rotate 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .header h1 {
             font-size: 24px;
             margin-bottom: 10px;
-            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            background: linear-gradient(45deg, #ffd700, #ff8c00, #ff69b4);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 5px rgba(255, 215, 0, 0.3)); }
+            50% { filter: brightness(1.2) drop-shadow(0 0 20px rgba(255, 215, 0, 0.6)); }
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .menu-grid {
@@ -50,13 +172,31 @@
             padding: 20px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .menu-item:hover::before {
+            left: 100%;
         }
 
         .menu-item:hover {
             background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-5px);
+            transform: translateY(-5px) scale(1.05) rotateZ(1deg);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.2);
         }
 
         .menu-icon {
@@ -76,15 +216,15 @@
 
         .screen {
             display: none;
+            animation: slideInRight 0.5s ease-out;
         }
 
         .screen.active {
             display: block;
-            animation: slideIn 0.3s ease-out;
         }
 
-        @keyframes slideIn {
-            from { transform: translateX(20px); opacity: 0; }
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
 
@@ -96,10 +236,12 @@
             border-radius: 20px;
             cursor: pointer;
             margin-top: 20px;
+            transition: all 0.3s ease;
         }
 
         .back-btn:hover {
             background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
 
         .form-group {
@@ -112,13 +254,21 @@
             color: #ccc;
         }
 
-        .form-group input {
+        .form-group input, .form-group select {
             width: 100%;
             padding: 10px;
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.1);
             color: white;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+            transform: scale(1.02);
         }
 
         .btn {
@@ -131,6 +281,12 @@
             cursor: pointer;
             width: 100%;
             margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
         }
 
         .card {
@@ -139,10 +295,74 @@
             padding: 15px;
             margin-bottom: 15px;
             border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .horoscope-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .horoscope-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .horoscope-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: scale(1.05);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #ffd700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite, pulse 2s ease-in-out infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
+            }
+            50% { 
+                transform: scale(1.1);
+                box-shadow: 0 0 0 20px rgba(255, 215, 0, 0);
+            }
         }
     </style>
 </head>
 <body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="planets">
+        <div class="planet mercury"></div>
+        <div class="planet venus"></div>
+        <div class="planet mars"></div>
+        <div class="planet jupiter"></div>
+    </div>
+
     <!-- Главный экран -->
     <div id="mainScreen" class="screen active">
         <div class="header">
@@ -160,13 +380,13 @@
             <div class="menu-item" onclick="showScreen('horoscopeScreen')">
                 <div class="menu-icon">🔮</div>
                 <div class="menu-title">Гороскоп</div>
-                <div class="menu-desc">Прогнозы на день</div>
+                <div class="menu-desc">Прогнозы на день/месяц</div>
             </div>
 
             <div class="menu-item" onclick="showScreen('transitsScreen')">
                 <div class="menu-icon">🪐</div>
                 <div class="menu-title">Транзиты</div>
-                <div class="menu-desc">Движение планет</div>
+                <div class="menu-desc">Влияние планет</div>
             </div>
 
             <div class="menu-item" onclick="showScreen('lunarScreen')">
@@ -198,36 +418,77 @@
 
         <button class="btn" onclick="calculateChart()">🔮 Рассчитать карту</button>
         <button class="back-btn" onclick="showScreen('mainScreen')">← Назад</button>
+        
+        <div id="chartResult" style="display: none;">
+            <div class="card">
+                <h3>✨ Ваша натальная карта готова!</h3>
+                <div id="chartData"></div>
+            </div>
+        </div>
     </div>
 
     <!-- Экран гороскопа -->
     <div id="horoscopeScreen" class="screen">
         <h2>🔮 Гороскоп</h2>
         
-        <div class="card">
-            <h3>Сегодня для Близнецов ♊</h3>
-            <p>⭐ <strong>Общий прогноз:</strong> День полон возможностей! Звёзды благоволят новым начинаниям.</p>
-            <p>💕 <strong>Любовь:</strong> Романтические встречи возможны во второй половине дня.</p>
-            <p>💰 <strong>Финансы:</strong> Удачное время для инвестиций, но избегай спонтанных трат.</p>
+        <div class="form-group">
+            <label>Выберите знак зодиака:</label>
+            <select id="zodiacSign">
+                <option value="">-- Выберите знак --</option>
+                <option value="aries">♈ Овен (21.03 - 20.04)</option>
+                <option value="taurus">♉ Телец (21.04 - 21.05)</option>
+                <option value="gemini">♊ Близнецы (22.05 - 21.06)</option>
+                <option value="cancer">♋ Рак (22.06 - 22.07)</option>
+                <option value="leo">♌ Лев (23.07 - 23.08)</option>
+                <option value="virgo">♍ Дева (24.08 - 23.09)</option>
+                <option value="libra">♎ Весы (24.09 - 23.10)</option>
+                <option value="scorpio">♏ Скорпион (24.10 - 22.11)</option>
+                <option value="sagittarius">♐ Стрелец (23.11 - 21.12)</option>
+                <option value="capricorn">♑ Козерог (22.12 - 20.01)</option>
+                <option value="aquarius">♒ Водолей (21.01 - 19.02)</option>
+                <option value="pisces">♓ Рыбы (20.02 - 20.03)</option>
+            </select>
         </div>
+
+        <div class="horoscope-buttons">
+            <div class="horoscope-btn" onclick="getHoroscope('today')">📅 На сегодня</div>
+            <div class="horoscope-btn" onclick="getHoroscope('month')">🗓️ На месяц</div>
+        </div>
+
+        <div id="horoscopeResult"></div>
 
         <button class="back-btn" onclick="showScreen('mainScreen')">← Назад</button>
     </div>
 
     <!-- Экран транзитов -->
     <div id="transitsScreen" class="screen">
-        <h2>🪐 Транзиты</h2>
+        <h2>🪐 Транзиты планет</h2>
         
         <div class="card">
-            <h3>⚡ Активные транзиты</h3>
-            <p><strong>🪐 Юпитер в оппозиции к Солнцу</strong></p>
-            <p style="color: #ccc;">Период переоценки целей. Возможны конфликты с авторитетами.</p>
+            <h3>🔮 Что такое транзиты?</h3>
+            <p>Транзиты - это когда планеты на небе "задевают" планеты в твоей карте и влияют на жизнь:</p>
+            <br>
+            <p>💕 <strong>Венера в доме любви</strong> → хороший день для свиданий</p>
+            <p>💰 <strong>Юпитер в доме денег</strong> → финансовые возможности</p>
+            <p>😤 <strong>Марс против Луны</strong> → можешь быть раздражительным</p>
         </div>
 
         <div class="card">
-            <h3>🔜 Предстоящие</h3>
-            <p><strong>📅 Через 3 дня: Новолуние в Деве</strong></p>
-            <p style="color: #ccc;">Идеальное время для новых начинаний в работе.</p>
+            <h3>⚡ Активные транзиты сегодня</h3>
+            <p><strong>🪐 Венера в тригоне к Луне</strong></p>
+            <p style="color: #4ecdc4;">Гармония в отношениях, творческий подъём!</p>
+            <br>
+            <p><strong>♂ Марс квадрат Меркурий</strong></p>
+            <p style="color: #feca57;">Будь осторожен в словах, возможны споры.</p>
+        </div>
+
+        <div class="card">
+            <h3>🔜 Предстоящие важные транзиты</h3>
+            <p><strong>📅 Через 3 дня:</strong> Новолуние в Деве</p>
+            <p>Идеальное время для новых начинаний в работе и здоровье.</p>
+            <br>
+            <p><strong>📅 Через неделю:</strong> Венера соединение Юпитер</p>
+            <p>Период изобилия в любви и финансах! 💎</p>
         </div>
 
         <button class="back-btn" onclick="showScreen('mainScreen')">← Назад</button>
@@ -238,19 +499,30 @@
         <h2>🌙 Лунный календарь</h2>
         
         <div class="card" style="text-align: center;">
-            <div style="font-size: 48px; margin-bottom: 10px;">🌖</div>
+            <div style="font-size: 48px; margin-bottom: 10px; animation: orbit 8s ease-in-out infinite;">🌖</div>
             <h3>Убывающая Луна в Козероге</h3>
-            <p>3 лунный день</p>
+            <p>3 лунный день • Сегодня: 05.09.2025</p>
         </div>
 
         <div class="card">
             <h3>✅ Благоприятно сегодня:</h3>
-            <p>• Завершение проектов<br>• Планирование финансов<br>• Работа с документами</p>
+            <p>• Завершение проектов и подведение итогов<br>
+            • Планирование финансов и бюджета<br>
+            • Работа с документами и отчётами<br>
+            • Избавление от ненужного (вещи, привычки)</p>
         </div>
 
         <div class="card">
             <h3>❌ Не рекомендуется:</h3>
-            <p>• Новые знакомства<br>• Риски и спонтанные решения</p>
+            <p>• Новые знакомства и партнёрства<br>
+            • Риски и спонтанные решения<br>
+            • Крупные покупки<br>
+            • Начало новых проектов</p>
+        </div>
+
+        <div class="card">
+            <h3>💡 Совет дня от Луны</h3>
+            <p>Сосредоточься на качестве, а не количестве. Один завершённый проект лучше трёх начатых. Используй энергию убывающей Луны для освобождения от лишнего в жизни.</p>
         </div>
 
         <button class="back-btn" onclick="showScreen('mainScreen')">← Назад</button>
@@ -260,15 +532,37 @@
         // Инициализация Telegram WebApp
         let tg = window.Telegram.WebApp;
         tg.expand();
+        tg.MainButton.hide();
+
+        // Генерация звёзд
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 150;
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                const size = Math.random();
+                if (size < 0.5) {
+                    star.className = 'star small';
+                } else if (size < 0.8) {
+                    star.className = 'star medium';
+                } else {
+                    star.className = 'star large';
+                }
+                
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (2 + Math.random() * 3) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
 
         // Переключение экранов
         function showScreen(screenId) {
-            // Скрыть все экраны
             document.querySelectorAll('.screen').forEach(screen => {
                 screen.classList.remove('active');
             });
-            
-            // Показать нужный экран
             document.getElementById(screenId).classList.add('active');
         }
 
@@ -283,6 +577,21 @@
                 return;
             }
 
+            // Показываем результат сразу в WebApp
+            document.getElementById('chartResult').style.display = 'block';
+            document.getElementById('chartData').innerHTML = `
+                <p><strong>📅 Дата:</strong> ${date}</p>
+                <p><strong>⏰ Время:</strong> ${time}</p>
+                <p><strong>📍 Место:</strong> ${place}</p>
+                <br>
+                <h4>🪐 Позиции планет:</h4>
+                <p>☉ Солнце в Близнецах (7 дом) - 15°</p>
+                <p>☽ Луна в Рыбах (4 дом) - 28°</p>
+                <p>☿ Меркурий в Близнецах (7 дом) - 8°</p>
+                <p>♀ Венера в Тельце (6 дом) - 22°</p>
+                <p>♂ Марс в Льве (9 дом) - 12°</p>
+            `;
+
             // Отправляем данные в бота
             tg.sendData(JSON.stringify({
                 action: 'calculate_chart',
@@ -292,10 +601,83 @@
             }));
         }
 
-        // Настройка темы под Telegram
-        if (tg.colorScheme === 'dark') {
-            document.body.style.background = '#1a1a1a';
+        // Получение гороскопа
+        function getHoroscope(period) {
+            const sign = document.getElementById('zodiacSign').value;
+            if (!sign) {
+                tg.showAlert('Сначала выберите знак зодиака!');
+                return;
+            }
+
+            const signNames = {
+                aries: 'Овен ♈',
+                taurus: 'Телец ♉',
+                gemini: 'Близнецы ♊',
+                cancer: 'Рак ♋',
+                leo: 'Лев ♌',
+                virgo: 'Дева ♍',
+                libra: 'Весы ♎',
+                scorpio: 'Скорпион ♏',
+                sagittarius: 'Стрелец ♐',
+                capricorn: 'Козерог ♑',
+                aquarius: 'Водолей ♒',
+                pisces: 'Рыбы ♓'
+            };
+
+            const horoscopes = {
+                today: {
+                    title: '📅 Гороскоп на сегодня',
+                    content: `
+                        <div class="card">
+                            <h3>${signNames[sign]} - Сегодня</h3>
+                            <p><strong>⭐ Общий прогноз:</strong> День полон возможностей! Звёзды благоволят новым начинаниям и важным решениям. Доверяй своей интуиции.</p>
+                            <p><strong>💕 Любовь:</strong> Романтические встречи возможны во второй половине дня. Будь открыт(а) к новым знакомствам.</p>
+                            <p><strong>💰 Финансы:</strong> Удачное время для инвестиций, но избегай спонтанных трат. Консультируйся с экспертами.</p>
+                            <p><strong>🎯 Карьера:</strong> Коллеги оценят твои идеи. Это хороший день для презентаций и переговоров.</p>
+                            <p><strong>🍀 Счастливые числа:</strong> 7, 14, 23</p>
+                            <p><strong>🎨 Цвет дня:</strong> Золотой</p>
+                        </div>
+                    `
+                },
+                month: {
+                    title: '🗓️ Гороскоп на месяц',
+                    content: `
+                        <div class="card">
+                            <h3>${signNames[sign]} - Сентябрь 2025</h3>
+                            <p><strong>🎯 Главная тема месяца:</strong> Трансформация и рост. Это время кардинальных изменений к лучшему.</p>
+                            <p><strong>📅 1-10 сентября:</strong> Период планирования. Закладывай фундамент для будущих успехов. Избегай поспешных решений.</p>
+                            <p><strong>📅 11-20 сентября:</strong> Активная фаза реализации планов. Максимум энергии и возможностей. Время действовать!</p>
+                            <p><strong>📅 21-30 сентября:</strong> Подведение итогов и награды за труды. Возможны приятные сюрпризы от судьбы.</p>
+                            <p><strong>💎 Ключевые даты:</strong> 7, 15, 23 сентября - особенно важные дни для принятия решений.</p>
+                            <p><strong>⚠️ Будь осторожен:</strong> 18 сентября - избегай конфликтов и спорных ситуаций.</p>
+                        </div>
+                    `
+                }
+            };
+
+            document.getElementById('horoscopeResult').innerHTML = `
+                <h3>${horoscopes[period].title}</h3>
+                ${horoscopes[period].content}
+            `;
+
+            // Отправляем данные в бота
+            tg.sendData(JSON.stringify({
+                action: 'get_horoscope',
+                sign: sign,
+                period: period,
+                signName: signNames[sign]
+            }));
         }
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            
+            // Настройка темы под Telegram
+            if (tg.colorScheme === 'dark') {
+                document.body.style.background = 'linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2d2d2d 100%)';
+            }
+        });
     </script>
 </body>
 </html>
