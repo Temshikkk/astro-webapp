@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌌 Астролог</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0c0c1d 0%, #1a1a2e 50%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .menu-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .menu-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .menu-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .menu-desc {
+            font-size: 12px;
+            color: #ccc;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ccc;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            color: black;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Главный экран -->
+    <div id="mainScreen" class="screen active">
+        <div class="header">
+            <h1>🌌 Цифровой Астролог</h1>
+            <p>Откройте тайны звёзд</p>
+        </div>
+
+        <div class="menu-grid">
+            <div class="menu-item" onclick="showScreen('natalScreen')">
+                <div class="menu-icon">🌟</div>
+                <div class="menu-title">Натальная карта</div>
+                <div class="menu-desc">Персональный гороскоп</div>
+            </div>
+
+            <div class="menu-item" onclick="showScreen('horoscopeScreen')">
+                <div class="menu-icon">🔮</div>
+                <div class="menu-title">Гороскоп</div>
+                <div class="menu-desc">Прогнозы на день</div>
+            </div>
+
+            <div class="menu-item" onclick="showScreen('transitsScreen')">
+                <div class="menu-icon">🪐</div>
+                <div class="menu-title">Транзиты</div>
+                <div class="menu-desc">Движение планет</div>
+            </div>
+
+            <div class="menu-item" onclick="showScreen('lunarScreen')">
+                <div class="menu-icon">🌙</div>
+                <div class="menu-title">Лунный календарь</div>
+                <div class="menu-desc">Фазы Луны</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Экран натальной карты -->
+    <div id="natalScreen" class="screen">
+        <h2>🌟 Натальная карта</h2>
+        
+        <div class="form-group">
+            <label>Дата рождения:</label>
+            <input type="date" id="birthDate" value="1990-06-15">
+        </div>
+        
+        <div class="form-group">
+            <label>Время рождения:</label>
+            <input type="time" id="birthTime" value="14:30">
+        </div>
+        
+        <div class="form-group">
+            <label>Место рождения:</label>
+            <input type="text" id="birthPlace" value="Москва, Россия">
+        </div>
+
+        <button class="btn" onclick="calculateChart()">🔮 Рассчитать карту</button>
+        <button class="back-btn" onclick="showScreen('mainScreen')">← Назад</button>
+    </div>
+
+    <!-- Экран гороскопа -->
+    <div id="horoscopeScreen" class="screen">
+        <h2>🔮 Гороскоп</h2>
+        
+        <div class="card">
+            <h3>Сегодня для Близнецов ♊</h3>
+            <p>⭐ <strong>Общий прогноз:</strong> День полон возможностей! Звёзды благоволят новым начинаниям.</p>
+            <p>💕 <strong>Любовь:</strong> Романтические встречи возможны во второй половине дня.</p>
+            <p>💰 <strong>Финансы:</strong> Удачное время для инвестиций, но избегай спонтанных трат.</p>
+        </div>
+
+        <button class="back-btn" onclick="showScreen('mainScreen')">← Назад</button>
+    </div>
+
+    <!-- Экран транзитов -->
+    <div id="transitsScreen" class="screen">
+        <h2>🪐 Транзиты</h2>
+        
+        <div class="card">
+            <h3>⚡ Активные транзиты</h3>
+            <p><strong>🪐 Юпитер в оппозиции к Солнцу</strong></p>
+            <p style="color: #ccc;">Период переоценки целей. Возможны конфликты с авторитетами.</p>
+        </div>
+
+        <div class="card">
+            <h3>🔜 Предстоящие</h3>
+            <p><strong>📅 Через 3 дня: Новолуние в Деве</strong></p>
+            <p style="color: #ccc;">Идеальное время для новых начинаний в работе.</p>
+        </div>
+
+        <button class="back-btn" onclick="showScreen('mainScreen')">← Назад</button>
+    </div>
+
+    <!-- Экран лунного календаря -->
+    <div id="lunarScreen" class="screen">
+        <h2>🌙 Лунный календарь</h2>
+        
+        <div class="card" style="text-align: center;">
+            <div style="font-size: 48px; margin-bottom: 10px;">🌖</div>
+            <h3>Убывающая Луна в Козероге</h3>
+            <p>3 лунный день</p>
+        </div>
+
+        <div class="card">
+            <h3>✅ Благоприятно сегодня:</h3>
+            <p>• Завершение проектов<br>• Планирование финансов<br>• Работа с документами</p>
+        </div>
+
+        <div class="card">
+            <h3>❌ Не рекомендуется:</h3>
+            <p>• Новые знакомства<br>• Риски и спонтанные решения</p>
+        </div>
+
+        <button class="back-btn" onclick="showScreen('mainScreen')">← Назад</button>
+    </div>
+
+    <script>
+        // Инициализация Telegram WebApp
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+
+        // Переключение экранов
+        function showScreen(screenId) {
+            // Скрыть все экраны
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Показать нужный экран
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // Расчёт натальной карты
+        function calculateChart() {
+            const date = document.getElementById('birthDate').value;
+            const time = document.getElementById('birthTime').value;
+            const place = document.getElementById('birthPlace').value;
+            
+            if (!date || !time || !place) {
+                tg.showAlert('Заполните все поля!');
+                return;
+            }
+
+            // Отправляем данные в бота
+            tg.sendData(JSON.stringify({
+                action: 'calculate_chart',
+                birthDate: date,
+                birthTime: time,
+                birthPlace: place
+            }));
+        }
+
+        // Настройка темы под Telegram
+        if (tg.colorScheme === 'dark') {
+            document.body.style.background = '#1a1a1a';
+        }
+    </script>
+</body>
+</html>
