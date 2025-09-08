@@ -22,122 +22,297 @@
             overflow-x: hidden;
         }
 
-        /* Базовые стили для экранов */
+        /* Звёздное небо */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        .star.small { width: 1px; height: 1px; }
+        .star.medium { width: 2px; height: 2px; }
+        .star.large { width: 3px; height: 3px; }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Анимированные планеты */
+        .planets {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            animation: orbit 20s linear infinite;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .planet.mercury {
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, #ffc649, #ff8c00);
+            top: 20%;
+            left: 75%;
+            animation-duration: 8s;
+        }
+
+        .planet.venus {
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #ffa500, #ff6b35);
+            top: 60%;
+            left: 15%;
+            animation-duration: 12s;
+        }
+
+        .planet.mars {
+            width: 7px;
+            height: 7px;
+            background: radial-gradient(circle, #ff4444, #cc1100);
+            top: 30%;
+            left: 20%;
+            animation-duration: 16s;
+        }
+
+        .planet.jupiter {
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, #d2691e, #a0522d);
+            top: 70%;
+            left: 80%;
+            animation-duration: 24s;
+        }
+
+        @keyframes orbit {
+            0% { transform: translate(0px, 0px) rotate(0deg) scale(1); opacity: 0.7; }
+            25% { transform: translate(-10px, -10px) rotate(90deg) scale(1.1); opacity: 1; }
+            50% { transform: translate(-5px, -5px) rotate(180deg) scale(1); opacity: 0.8; }
+            75% { transform: translate(-15px, -15px) rotate(270deg) scale(1.1); opacity: 1; }
+            100% { transform: translate(0px, 0px) rotate(360deg) scale(1); opacity: 0.7; }
+        }
+
+        /* Анимированный заголовок */
+        h1 {
+            text-align: center; 
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ffd700, #ff8c00, #ff69b4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 3s ease-in-out infinite;
+            position: relative;
+        }
+
+        h1::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            animation: rotate 8s linear infinite;
+            z-index: -1;
+            border-radius: 20px;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 5px rgba(255, 215, 0, 0.3)); }
+            50% { filter: brightness(1.2) drop-shadow(0 0 20px rgba(255, 215, 0, 0.6)); }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Экраны */
         .screen {
             display: none;
+            animation: slideIn 0.5s ease-out;
         }
 
         .screen.active {
             display: block;
         }
 
+        @keyframes slideIn {
+            from { transform: translateX(50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
         /* Кнопки */
         .btn {
-            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            background: linear-gradient(145deg, #ffd700, #ff8c00);
             color: #000;
             border: none;
-            padding: 12px 20px;
-            border-radius: 15px;
-            font-weight: 600;
+            padding: 14px 20px;
+            border-radius: 16px;
+            font-weight: 700;
             cursor: pointer;
             width: 100%;
             margin: 10px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(255, 140, 0, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(255, 140, 0, 0.5);
         }
 
         .back-btn {
             background: rgba(255, 255, 255, 0.1);
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 10px 20px;
-            border-radius: 10px;
+            padding: 12px 20px;
+            border-radius: 14px;
             cursor: pointer;
             margin-top: 15px;
+            transition: all 0.3s ease;
         }
 
-        /* Простая сетка меню */
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* Меню */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 20px;
         }
 
         .menu-item {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 15px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            border-radius: 18px;
+            padding: 16px 10px;
             text-align: center;
             cursor: pointer;
+            transition: all 0.4s ease;
             border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
         .menu-item:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 215, 0, 0.3);
         }
 
         .menu-icon {
-            font-size: 24px;
-            margin-bottom: 5px;
+            font-size: 26px;
+            margin-bottom: 6px;
+            display: block;
+            line-height: 1;
         }
 
         .menu-title {
             font-weight: 600;
             font-size: 14px;
+            margin-bottom: 3px;
+            line-height: 1.2;
         }
 
         .menu-desc {
             font-size: 11px;
-            color: #ccc;
+            color: #bbb;
+            line-height: 1.2;
         }
 
         /* Формы */
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
-            color: #ccc;
+            margin-bottom: 8px;
+            color: #ddd;
+            font-weight: 500;
         }
 
         .form-group input, .form-group select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
+            padding: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.08);
             color: white;
+            transition: all 0.3s ease;
+            font-size: 16px;
         }
 
         .form-group input:focus, .form-group select:focus {
             outline: none;
             border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.12);
         }
 
         /* Карточки */
         .card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 15px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+            border-radius: 16px;
+            padding: 18px;
             margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            animation: cardSlide 0.6s ease-out;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes cardSlide {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         h2 {
             margin-bottom: 20px;
             text-align: center;
+            color: #ffd700;
         }
 
         h3 {
             margin-bottom: 10px;
+            color: #ffeb99;
         }
     </style>
 </head>
 <body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="planets">
+        <div class="planet mercury"></div>
+        <div class="planet venus"></div>
+        <div class="planet mars"></div>
+        <div class="planet jupiter"></div>
+    </div>
+
     <!-- Главный экран -->
     <div id="mainScreen" class="screen active">
-        <h1 style="text-align: center; margin-bottom: 20px;">🌌 Цифровой Астролог</h1>
+        <h1>🌌 Цифровой Астролог</h1>
         
         <div class="menu-grid">
             <div class="menu-item" onclick="showScreen('natalScreen')">
@@ -290,16 +465,13 @@
 
         // Переключение экранов
         function showScreen(screenId) {
-            // Скрываем все экраны
             document.querySelectorAll('.screen').forEach(screen => {
                 screen.classList.remove('active');
             });
-            
-            // Показываем нужный экран
             document.getElementById(screenId).classList.add('active');
         }
 
-        // Тестовые функции (пока заглушки)
+        // Функции
         function calculateChart() {
             alert('Натальная карта работает!');
         }
@@ -336,6 +508,35 @@
                 </div>
             `;
         }
+
+        // Генерация звёзд
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 150;
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                const size = Math.random();
+                if (size < 0.5) {
+                    star.className = 'star small';
+                } else if (size < 0.8) {
+                    star.className = 'star medium';
+                } else {
+                    star.className = 'star large';
+                }
+                
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (2 + Math.random() * 3) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Запуск при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+        });
     </script>
 </body>
 </html>
